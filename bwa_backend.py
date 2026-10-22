@@ -2,6 +2,14 @@ from __future__ import annotations
 
 import operator
 import os
+# from google import genai
+# from google.genai import types
+
+from dotenv import load_dotenv
+load_dotenv(override=True)  # load .env for TAVILY_API_KEY, GEMINI_API_KEY
+#os.environ.pop("OPENAI_API_KEY", None)
+#os.environ.pop("OPENAI_BASE_URL", None)  # ensure we don't accidentally use OpenAI
+
 import re
 from datetime import date, timedelta
 from pathlib import Path
@@ -13,10 +21,9 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.types import Send
 
 from langchain_openai import ChatOpenAI
+#from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import SystemMessage, HumanMessage
-from dotenv import load_dotenv
 
-load_dotenv()
 
 # ============================================================
 # Blog Writer (Router → (Research?) → Orchestrator → Workers → ReducerWithImages)
@@ -113,7 +120,12 @@ class State(TypedDict):
 # -----------------------------
 # 2) LLM
 # -----------------------------
-llm = ChatOpenAI(model="gpt-4.1-mini")
+llm = ChatOpenAI(model="gpt-4o-mini")
+#llm = ChatGoogleGenerativeAI(
+                            #  model="gemini-3.1-flash-lite",
+                            #  api_key=os.getenv("GEMINI_API_KEY"),
+                            #  max_retries=5
+                            # ) 
 
 # -----------------------------
 # 3) Router
@@ -441,7 +453,7 @@ def _gemini_generate_image_bytes(prompt: str) -> bytes:
     client = genai.Client(api_key=api_key)
 
     resp = client.models.generate_content(
-        model="gemini-2.5-flash-image",
+        model="gemini-3.8-flash",
         contents=prompt,
         config=types.GenerateContentConfig(
             response_modalities=["IMAGE"],
@@ -469,8 +481,11 @@ def _gemini_generate_image_bytes(prompt: str) -> bytes:
         inline = getattr(part, "inline_data", None)
         if inline and getattr(inline, "data", None):
             return inline.data
-
+    
     raise RuntimeError("No inline image bytes found in response.")
+
+    
+
 
 
 def _safe_slug(title: str) -> str:

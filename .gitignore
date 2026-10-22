@@ -1,0 +1,16 @@
+# Environment variables / Secrets
+.env
+
+# Python cache & virtual environments
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# Local generated outputs & images
+images/
+*.md
+!README.md
+
+# Jupyter Notebook Checkpoints
+.ipynb_checkpoints/

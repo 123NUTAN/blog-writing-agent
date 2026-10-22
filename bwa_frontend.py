@@ -2,6 +2,11 @@ from __future__ import annotations
 
 import json
 import os
+from dotenv import load_dotenv
+load_dotenv(override=True)  # Load .env file for API keys   
+# os.environ.pop("OPENAI_API_KEY", None)
+# os.environ.pop("OPENAI_BASE_URL", None)
+
 import re
 import zipfile
 from datetime import date
