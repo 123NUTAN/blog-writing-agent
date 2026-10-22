@@ -1,0 +1,16 @@
+# LangChain & LangGraph Frameworks
+langgraph
+langchain
+langchain-core
+langchain-openai
+
+# AI Models & SDKs
+openai
+google-genai
+
+# Tools & Utilities
+tavily-python
+python-dotenv
+
+# Frontend Interface
+streamlit
